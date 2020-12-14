@@ -1,5 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>selling.qml</file>
+        <file>selled.qml</file>
+        <file>returned.qml</file>
+        <file>selling.png</file>
+        <file>selled.png</file>
+        <file>returned.png</file>
     </qresource>
 </RCC>

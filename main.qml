@@ -3,6 +3,8 @@ import QtQuick.Window 2.15
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.4
 import QtGraphicalEffects 1.0
+import QtQuick.Controls.Material 2.3
+import QtQuick.Controls.Material.impl 2.3
 
 Window {
     width: 1280
@@ -45,8 +47,18 @@ Window {
             onClicked: container.loadScreen(0)
             background: Rectangle {
                 implicitWidth: 100
-                implicitHeight: 40
-                color: "white"
+                implicitHeight: 50
+                color: "transparent"
+                Ripple {
+                    clipRadius: 2
+                    width: parent.width
+                    height: parent.height
+                    pressed: sellingButton.pressed
+                    anchor: sellingButton
+                    active: sellingButton.down || sellingButton.visualFocus
+                            || sellingButton.hovered
+                    color: "#e6e6e6"
+                }
             }
             contentItem: Item {
                 anchors.fill: sellingButton
@@ -73,11 +85,16 @@ Window {
                 ScaleAnimator {
                     target: sellingButton
                     from: 1
-                    to: 0.5
+                    to: 0.7
                 }
                 ScaleAnimator {
                     target: sellingButton
-                    from: 0.5
+                    from: 0.7
+                    to: 1.2
+                }
+                ScaleAnimator {
+                    target: sellingButton
+                    from: 1.2
                     to: 1
                 }
                 alwaysRunToEnd: true
@@ -89,8 +106,18 @@ Window {
             onClicked: container.loadScreen(1)
             background: Rectangle {
                 implicitWidth: 100
-                implicitHeight: 40
-                color: "white"
+                implicitHeight: 50
+                color: "transparent"
+                Ripple {
+                    clipRadius: 2
+                    width: parent.width
+                    height: parent.height
+                    pressed: selledButton.pressed
+                    anchor: selledButton
+                    active: selledButton.down || selledButton.visualFocus
+                            || selledButton.hovered
+                    color: "#e6e6e6"
+                }
             }
             contentItem: Item {
                 anchors.fill: selledButton
@@ -117,11 +144,16 @@ Window {
                 ScaleAnimator {
                     target: selledButton
                     from: 1
-                    to: 0.5
+                    to: 0.7
                 }
                 ScaleAnimator {
                     target: selledButton
-                    from: 0.5
+                    from: 0.7
+                    to: 1.2
+                }
+                ScaleAnimator {
+                    target: selledButton
+                    from: 1.2
                     to: 1
                 }
                 alwaysRunToEnd: true
@@ -134,8 +166,18 @@ Window {
             onClicked: container.loadScreen(2)
             background: Rectangle {
                 implicitWidth: 100
-                implicitHeight: 40
-                color: "white"
+                implicitHeight: 50
+                color: "transparent"
+                Ripple {
+                    clipRadius: 2
+                    width: parent.width
+                    height: parent.height
+                    pressed: returnedButton.pressed
+                    anchor: returnedButton
+                    active: returnedButton.down || returnedButton.visualFocus
+                            || returnedButton.hovered
+                    color: "#e6e6e6"
+                }
             }
             contentItem: Item {
                 anchors.fill: returnedButton
@@ -162,11 +204,16 @@ Window {
                 ScaleAnimator {
                     target: returnedButton
                     from: 1
-                    to: 0.5
+                    to: 0.7
                 }
                 ScaleAnimator {
                     target: returnedButton
-                    from: 0.5
+                    from: 0.7
+                    to: 1.2
+                }
+                ScaleAnimator {
+                    target: returnedButton
+                    from: 1.2
                     to: 1
                 }
                 alwaysRunToEnd: true

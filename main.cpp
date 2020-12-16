@@ -1,5 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QQuickStyle>
+#include "selling.cpp"
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +19,12 @@ int main(int argc, char *argv[])
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
+
+    QQuickStyle::setStyle("Material");
+    //selling
+    Selling sellingPresenter;
+    engine.rootContext()->setContextObject(&sellingPresenter);
+
     engine.load(url);
 
     return app.exec();

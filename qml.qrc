@@ -7,5 +7,7 @@
         <file>selling.png</file>
         <file>selled.png</file>
         <file>returned.png</file>
+        <file>add.png</file>
+        <file>save.png</file>
     </qresource>
 </RCC>

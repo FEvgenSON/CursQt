@@ -254,7 +254,9 @@ Item {
                 color: "#6202EE"
                 MouseArea{
                     anchors.fill: buy
-                    onClicked: { container.clicked() }
+                    onClicked: {
+                        buyItem(modelData.id)
+                    }
                 }
             }
             Text {
@@ -269,7 +271,7 @@ Item {
                 color: "#6202EE"
                 MouseArea{
                     anchors.fill: trash
-                    onClicked: { container.clicked() }
+                    onClicked: { trashItem(modelData.id) }
                 }
             }
             MouseArea{
@@ -371,7 +373,7 @@ Item {
                 color: "#6202EE"
                 MouseArea{
                     anchors.fill: femaleBuy
-                    onClicked: { container.clicked() }
+                    onClicked: { buyItem(modelData.id) }
                 }
             }
             Text {
@@ -386,7 +388,7 @@ Item {
                 color: "#6202EE"
                 MouseArea{
                     anchors.fill: femaleTrash
-                    onClicked: { container.clicked() }
+                    onClicked: { trashItem(modelData.id) }
                 }
             }
             MouseArea{

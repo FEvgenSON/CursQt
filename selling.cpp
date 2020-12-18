@@ -58,6 +58,18 @@ public:
         emit femaleListChanged();
     }
 
+    Q_INVOKABLE void buyItem(int id){
+        buyProduct(id);
+        emit maleListChanged();
+        emit femaleListChanged();
+    }
+
+    Q_INVOKABLE void trashItem(int id){
+        sellingTrash(id);
+        emit maleListChanged();
+        emit femaleListChanged();
+    }
+
 signals:
     void maleListChanged();
     void femaleListChanged();

@@ -9,5 +9,9 @@
         <file>returned.png</file>
         <file>add.png</file>
         <file>save.png</file>
+        <file>help.qml</file>
+        <file>help1.qml</file>
+        <file>help2.qml</file>
+        <file>back.png</file>
     </qresource>
 </RCC>

@@ -61,6 +61,7 @@ Item {
                 anchors.right: parent.right
                 anchors.top: parent.top
                 source: modelData.photo
+                fillMode: Image.PreserveAspectFit
             }
             Label{
                 anchors.topMargin: 9
@@ -143,6 +144,7 @@ Item {
                 anchors.right: parent.right
                 anchors.top: parent.top
                 source: modelData.photo
+                fillMode: Image.PreserveAspectFit
             }
             Label{
                 anchors.topMargin: 9

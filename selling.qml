@@ -34,11 +34,25 @@ Item {
         modal: true
         focus: true
 
+        Image{
+            id:backButton
+            source:"back.png"
+            anchors.verticalCenter: addMaleTopText.verticalCenter
+            anchors.margins: 20
+            anchors.left: parent.left
+            MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    addMalePopup.close()
+                }
+            }
+        }
+
         Text {
             id: addMaleTopText
             anchors.margins: 20
             anchors.top: parent.top
-            anchors.left: parent.left
+            anchors.left: backButton.right
             font.family: "Roboto regular"
             font.pointSize: 18
             color: "#66666666"
@@ -91,6 +105,7 @@ Item {
                 anchors.right: parent.right
                 anchors.top: parent.top
                 source: var_photoPath
+                fillMode: Image.PreserveAspectFit
             }
             Label{
                 anchors.topMargin: 9
@@ -156,6 +171,7 @@ Item {
                     anchors.margins: 10
                     anchors.right: addText.left
                     anchors.verticalCenter: parent.verticalCenter
+                    fillMode: Image.PreserveAspectFit
                 }
                 ColorOverlay {
                     anchors.fill: addIcon
@@ -235,6 +251,7 @@ Item {
                 anchors.right: parent.right
                 anchors.top: parent.top
                 source: modelData.photo
+                fillMode: Image.PreserveAspectFit
             }
             Label{
                 anchors.topMargin: 9
@@ -373,6 +390,7 @@ Item {
                 anchors.right: parent.right
                 anchors.top: parent.top
                 source: modelData.photo
+                fillMode: Image.PreserveAspectFit
             }
             Label{
                 anchors.topMargin: 9

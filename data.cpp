@@ -20,6 +20,7 @@ struct SelledProduct{
     int price;
     int count;
     std::string photo;
+    int oldId;
     bool male;
 };
 
@@ -29,8 +30,84 @@ struct TrashProduct{
     int price;
     int count;
     std::string photo;
+    int oldId;
     bool male;
 };
+
+SelledProduct* copy(SelledProduct product){
+    SelledProduct* result = new SelledProduct();
+    result->id = product.id;
+    result->name = product.name;
+    result->price = product.price;
+    result->count = product.count;
+    result->photo = product.photo;
+    result->oldId = product.oldId;
+    result->male = product.male;
+    return result;
+}
+
+TrashProduct* copy(TrashProduct product){
+    TrashProduct* result = new TrashProduct();
+    result->id = product.id;
+    result->name = product.name;
+    result->price = product.price;
+    result->count = product.count;
+    result->photo = product.photo;
+    result->oldId = product.oldId;
+    result->male = product.male;
+    return result;
+}
+
+bool equal(Product product, SelledProduct selledProduct){
+    return product.id == selledProduct.oldId &&
+            product.name == selledProduct.name &&
+            product.male == selledProduct.male &&
+            product.price == selledProduct.price &&
+            product.photo == selledProduct.photo;
+}
+
+bool equal(Product product, TrashProduct selledProduct){
+    return product.id == selledProduct.oldId &&
+            product.name == selledProduct.name &&
+            product.male == selledProduct.male &&
+            product.price == selledProduct.price &&
+            product.photo == selledProduct.photo;
+}
+
+bool equal(SelledProduct product, TrashProduct selledProduct){
+    return product.oldId == selledProduct.oldId &&
+            product.name == selledProduct.name &&
+            product.male == selledProduct.male &&
+            product.price == selledProduct.price &&
+            product.photo == selledProduct.photo;
+}
+
+SelledProduct* find(Product product, std::vector<SelledProduct> products){
+    for(auto i: products){
+        if (equal(product, i)){
+            return copy(i);
+        }
+    }
+    return nullptr;
+}
+
+TrashProduct* find(Product product, std::vector<TrashProduct> products){
+    for(auto i: products){
+        if (equal(product, i)){
+            return copy(i);
+        }
+    }
+    return nullptr;
+}
+
+TrashProduct* find(SelledProduct product, std::vector<TrashProduct> products){
+    for(auto i: products){
+        if (equal(product, i)){
+            return copy(i);
+        }
+    }
+    return nullptr;
+}
 
 struct QMLProduct{
     Q_GADGET
@@ -40,12 +117,14 @@ struct QMLProduct{
     Q_PROPERTY(int count MEMBER _count)
     Q_PROPERTY(QString photo MEMBER _photo)
     Q_PROPERTY(bool male MEMBER _male)
+    Q_PROPERTY(int oldId MEMBER _oldId)
 public:
     int _id = 0;
     QString _name;
     int _price;
     int _count;
     QString _photo;
+    int _oldId;
     bool _male;
 };
 Q_DECLARE_METATYPE(QMLProduct)
@@ -69,6 +148,7 @@ QMLProduct toQMLProduct(SelledProduct product){
     qmlProduct._count = product.count;
     qmlProduct._photo = QString::fromStdString(product.photo);
     qmlProduct._male = product.male;
+    qmlProduct._oldId = product.oldId;
     return qmlProduct;
 }
 
@@ -80,39 +160,40 @@ QMLProduct toQMLProduct(TrashProduct product){
     qmlProduct._count = product.count;
     qmlProduct._photo = QString::fromStdString(product.photo);
     qmlProduct._male = product.male;
+    qmlProduct._oldId = product.oldId;
     return qmlProduct;
 }
 
 SelledProduct toSelledProduct(Product product){
     SelledProduct selledProduct;
-    selledProduct.id = product.id;
     selledProduct.name = product.name;
     selledProduct.price = product.price;
     selledProduct.count = product.count;
     selledProduct.photo = product.photo;
     selledProduct.male = product.male;
+    selledProduct.oldId = product.id;
     return selledProduct;
 }
 
 TrashProduct toTrashProduct(Product product){
     TrashProduct trashProduct;
-    trashProduct.id = product.id;
     trashProduct.name = product.name;
     trashProduct.price = product.price;
     trashProduct.count = product.count;
     trashProduct.photo = product.photo;
     trashProduct.male = product.male;
+    trashProduct.oldId = product.id;
     return trashProduct;
 }
 
 TrashProduct toTrashProduct(SelledProduct product){
     TrashProduct trashProduct;
-    trashProduct.id = product.id;
     trashProduct.name = product.name;
     trashProduct.price = product.price;
     trashProduct.count = product.count;
     trashProduct.photo = product.photo;
     trashProduct.male = product.male;
+    trashProduct.oldId = product.oldId;
     return trashProduct;
 }
 
@@ -134,7 +215,8 @@ auto storage = make_storage(
                 make_column("price",&SelledProduct::price),
                 make_column("count",&SelledProduct::count),
                 make_column("photo",&SelledProduct::photo),
-                make_column("male",&SelledProduct::male)
+                make_column("male",&SelledProduct::male),
+                make_column("oldId",&SelledProduct::oldId)
                 ),
             make_table(
                 "trash",
@@ -143,7 +225,8 @@ auto storage = make_storage(
                 make_column("price",&TrashProduct::price),
                 make_column("count",&TrashProduct::count),
                 make_column("photo",&TrashProduct::photo),
-                make_column("male",&TrashProduct::male)
+                make_column("male",&TrashProduct::male),
+                make_column("oldId",&TrashProduct::oldId)
                 )
             );
 
@@ -164,6 +247,72 @@ void insertProduct(Product product){
 
 void updateProduct(Product product){
     storage.update<Product>(product);
+}
+
+int getMaleSellingPrice(){
+    int result = 0;
+    auto productList = storage.get_all<Product>();
+    for(auto product: productList){
+        if (product.male){
+            result += product.price * product.count;
+        }
+    }
+    return result;
+}
+
+int getFemaleSellingPrice(){
+    int result = 0;
+    auto productList = storage.get_all<Product>();
+    for(auto product: productList){
+        if (!product.male){
+            result += product.price * product.count;
+        }
+    }
+    return result;
+}
+
+int getMaleSelledPrice(){
+    int result = 0;
+    auto productList = storage.get_all<SelledProduct>();
+    for(auto product: productList){
+        if (product.male){
+            result += product.price * product.count;
+        }
+    }
+    return result;
+}
+
+int getFemaleSelledPrice(){
+    int result = 0;
+    auto productList = storage.get_all<SelledProduct>();
+    for(auto product: productList){
+        if (!product.male){
+            result += product.price * product.count;
+        }
+    }
+    return result;
+}
+
+int getMaleTrashPrice(){
+    int result = 0;
+    auto productList = storage.get_all<TrashProduct>();
+    for(auto product: productList){
+        if (product.male){
+            result += product.price * product.count;
+        }
+    }
+    return result;
+}
+
+int getFemaleTrashPrice(){
+    int result = 0;
+    auto productList = storage.get_all<TrashProduct>();
+    for(auto product: productList){
+        if (!product.male){
+            result += product.price * product.count;
+        }
+    }
+    return result;
 }
 
 QList<QMLProduct> getAllMaleProduct(){
@@ -188,6 +337,51 @@ QList<QMLProduct> getAllFemaleProduct(){
     return qmlProductList;
 }
 
+QList<QMLProduct> getAllSelledMaleProduct(){
+    auto productList = storage.get_all<SelledProduct>();
+    QList<QMLProduct> qmlProductList;
+    for(auto product: productList){
+        if (product.male){
+            qmlProductList.push_back(toQMLProduct(product));
+        }
+    }
+    return qmlProductList;
+}
+
+QList<QMLProduct> getAllSelledFemaleProduct(){
+    auto productList = storage.get_all<SelledProduct>();
+    QList<QMLProduct> qmlProductList;
+    for(auto product: productList){
+        if (!product.male){
+            qmlProductList.push_back(toQMLProduct(product));
+        }
+    }
+    return qmlProductList;
+}
+
+QList<QMLProduct> getAllTrashMaleProduct(){
+    auto productList = storage.get_all<TrashProduct>();
+    QList<QMLProduct> qmlProductList;
+    for(auto product: productList){
+        if (product.male){
+            qmlProductList.push_back(toQMLProduct(product));
+        }
+    }
+    return qmlProductList;
+}
+
+QList<QMLProduct> getAllTrashFemaleProduct(){
+    auto productList = storage.get_all<TrashProduct>();
+    QList<QMLProduct> qmlProductList;
+    for(auto product: productList){
+        if (!product.male){
+            qmlProductList.push_back(toQMLProduct(product));
+        }
+    }
+    return qmlProductList;
+}
+
+
 void deleteProduct(int id){
     storage.remove<Product>(id);
 }
@@ -200,7 +394,7 @@ void buyProduct(int id){
         product.count--;
         storage.update<Product>(product);
     }
-    auto selledProduct = storage.get_pointer<SelledProduct>(id);
+    auto selledProduct = find(product,storage.get_all<SelledProduct>());
     if (selledProduct == nullptr){
         product.count = 1;
         storage.insert<SelledProduct>(toSelledProduct(product));
@@ -218,7 +412,7 @@ void sellingTrash(int id){
         product.count--;
         storage.update<Product>(product);
     }
-    auto trashProduct = storage.get_pointer<TrashProduct>(id);
+    auto trashProduct = find(product, storage.get_all<TrashProduct>());
     if (trashProduct == nullptr){
         product.count = 1;
         storage.insert<TrashProduct>(toTrashProduct(product));
@@ -236,7 +430,7 @@ void selledTrash(int id){
         product.count--;
         storage.update<SelledProduct>(product);
     }
-    auto trashProduct = storage.get_pointer<TrashProduct>(id);
+    auto trashProduct = find(product,storage.get_all<TrashProduct>());
     if (trashProduct == nullptr){
         product.count = 1;
         storage.insert<TrashProduct>(toTrashProduct(product));

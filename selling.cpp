@@ -26,6 +26,78 @@ class Selling : public QObject{
         return result;
     }
 
+    Q_PROPERTY(int sellingMalePrice READ sellingMalePrice NOTIFY maleListChanged)
+    int sellingMalePrice(){
+        return getMaleSellingPrice();
+    }
+
+    Q_PROPERTY(int sellingFemalePrice READ sellingFemalePrice NOTIFY maleListChanged)
+    int sellingFemalePrice(){
+        return getFemaleSellingPrice();
+    }
+
+    Q_PROPERTY(QVariantList maleSelledList READ maleSelledList NOTIFY maleListChanged)
+    QVariantList maleSelledList(){
+        auto list = getAllSelledMaleProduct();
+        QVariantList result;
+        for (auto item : list){
+            result << QVariant::fromValue(item);
+        }
+        return result;
+    }
+
+    Q_PROPERTY(QVariantList femaleSelledList READ femaleSelledList NOTIFY maleListChanged)
+    QVariantList femaleSelledList(){
+        auto list = getAllSelledFemaleProduct();
+        QVariantList result;
+        for (auto item : list){
+            result << QVariant::fromValue(item);
+        }
+        return result;
+    }
+
+    Q_PROPERTY(int selledMalePrice READ selledMalePrice NOTIFY maleListChanged)
+    int selledMalePrice(){
+        return getMaleSelledPrice();
+    }
+
+    Q_PROPERTY(int selledFemalePrice READ selledFemalePrice NOTIFY maleListChanged)
+    int selledFemalePrice(){
+        return getFemaleSelledPrice();
+    }
+
+
+    Q_PROPERTY(QVariantList maleTrashList READ maleTrashList NOTIFY maleListChanged)
+    QVariantList maleTrashList(){
+        auto list = getAllTrashMaleProduct();
+        QVariantList result;
+        for (auto item : list){
+            result << QVariant::fromValue(item);
+        }
+        return result;
+    }
+
+    Q_PROPERTY(QVariantList femaleTrashList READ femaleTrashList NOTIFY maleListChanged)
+    QVariantList femaleTrashList(){
+        auto list = getAllTrashFemaleProduct();
+        QVariantList result;
+        for (auto item : list){
+            result << QVariant::fromValue(item);
+        }
+        return result;
+    }
+
+    Q_PROPERTY(int trashMalePrice READ trashMalePrice NOTIFY maleListChanged)
+    int trashMalePrice(){
+        return getMaleTrashPrice();
+    }
+
+    Q_PROPERTY(int trashFemalePrice READ trashFemalePrice NOTIFY maleListChanged)
+    int trashFemalePrice(){
+        return getFemaleTrashPrice();
+    }
+
+
 public:
     Q_INVOKABLE void deleteItem(int id){
         deleteProduct(id);
@@ -66,6 +138,12 @@ public:
 
     Q_INVOKABLE void trashItem(int id){
         sellingTrash(id);
+        emit maleListChanged();
+        emit femaleListChanged();
+    }
+
+    Q_INVOKABLE void trashSelledItem(int id){
+        selledTrash(id);
         emit maleListChanged();
         emit femaleListChanged();
     }

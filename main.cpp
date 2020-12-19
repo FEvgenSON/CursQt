@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
+#include <QIcon>
 #include "selling.cpp"
 
 int main(int argc, char *argv[])
@@ -26,6 +27,8 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextObject(&sellingPresenter);
 
     engine.load(url);
+
+    app.setWindowIcon(QIcon("window.png"));
 
     return app.exec();
 }

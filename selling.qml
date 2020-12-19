@@ -192,16 +192,35 @@ Item {
         anchors.right: parent.horizontalCenter
         cellWidth: 232
         cellHeight: 253
-        header: Label{
-            anchors.bottomMargin: 20
-            horizontalAlignment: Text.AlignHCenter
+        header: Item {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-            font.family: "Roboto Light"
-            font.pointSize: 60
-            color: "#3d3d3d"
-            text: "Мужская"
+            height: topTextText.height + bottomTextText.height
+            Label{
+                id: topTextText
+                anchors.bottomMargin: 10
+                horizontalAlignment: Text.AlignHCenter
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.family: "Roboto Light"
+                font.pointSize: 60
+                color: "#3d3d3d"
+                text: "Мужская"
+            }
+            Label{
+                id:bottomTextText
+                anchors.bottomMargin: 20
+                horizontalAlignment: Text.AlignHCenter
+                anchors.top: topTextText.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.family: "Roboto Light"
+                font.pointSize: 25
+                color: "#3d3d3d"
+                text: "Всего: " + sellingMalePrice + " руб"
+            }
         }
         id: maleGridView
         model: maleList
@@ -313,16 +332,35 @@ Item {
         anchors.left: parent.horizontalCenter
         id: femaleGridView
         model: femaleList
-        header: Label{
-            anchors.bottomMargin: 20
-            horizontalAlignment: Text.AlignHCenter
+        header: Item {
             anchors.top: parent.top
-            anchors.right: parent.right
             anchors.left: parent.left
-            font.family: "Roboto Light"
-            font.pointSize: 60
-            color: "#3d3d3d"
-            text: "Женская"
+            anchors.right: parent.right
+            height: topTextText2.height + bottomTextText2.height
+            Label{
+                id: topTextText2
+                anchors.bottomMargin: 10
+                horizontalAlignment: Text.AlignHCenter
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.family: "Roboto Light"
+                font.pointSize: 60
+                color: "#3d3d3d"
+                text: "Женская"
+            }
+            Label{
+                id:bottomTextText2
+                anchors.bottomMargin: 20
+                horizontalAlignment: Text.AlignHCenter
+                anchors.top: topTextText2.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                font.family: "Roboto Light"
+                font.pointSize: 25
+                color: "#3d3d3d"
+                text:"Всего: " + sellingFemalePrice + " руб"
+            }
         }
         delegate: Pane{
             width: 222
